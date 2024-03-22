@@ -1,0 +1,227 @@
+{
+	"info": {
+		"_postman_id": "2932cd25-0e9b-45fa-ae89-9c4a997bcaeb",
+		"name": "library's",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32841933",
+		"_collection_link": "https://lively-meadow-100197.postman.co/workspace/reqreas~593f47ae-6f78-4f35-ae20-a5d191806598/collection/32841933-2932cd25-0e9b-45fa-ae89-9c4a997bcaeb?action=share&source=collection_link&creator=32841933"
+	},
+	"item": [
+		{
+			"name": "add book",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let Num = pm.variables.replaceIn('{{$randomFirstName}}')\r",
+							"let Color = pm.variables.replaceIn('{{$randomColor}}')\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"randomname\",Num+ \" \" + Color)\r",
+							"\r",
+							"pm.collectionVariables.set(\"randomnum\", pm.variables.replaceIn('{{$randomInt}}')\r",
+							")\r",
+							"pm.collectionVariables.set(\"randomid\", pm.variables.replaceIn('{{$guid}}')\r",
+							")\r",
+							"\r",
+							"pm.collectionVariables.set(\"randomauther\", pm.variables.replaceIn(\"{{$randomFullName}}\"))\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responsenum = pm.response.json()\r",
+							"console.log(responsenum.ID)\r",
+							"pm.collectionVariables.set(\"testid\", responsenum.ID)\r",
+							"\r",
+							"let msgStatus = responsenum.Msg\r",
+							"\r",
+							"pm.test(\"this is to check status of process added\", function () {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})\r",
+							"// pm.test(\"this is to check status of process added\", function () {\r",
+							"//     pm.response.to.have.status(404)\r",
+							"// })\r",
+							"\r",
+							"pm.test(\"this is to check msg status\", function () {\r",
+							"    pm.expect(msgStatus).to.equal(\"successfully added\")\r",
+							"}\r",
+							"    , console.log(responsenum.Msg))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{randomname}}\",\r\n    \"isbn\": \"{{randomid}}\",\r\n    \"aisle\": \"{{randomnum}}\",\r\n    \"author\": \"{{randomauther}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}Addbook.php",
+					"host": [
+						"{{BaseURL}}Addbook",
+						"php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"this is to check status of process added\", function () {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}GetBook.php?ID={{testid}}",
+					"host": [
+						"{{BaseURL}}GetBook",
+						"php"
+					],
+					"query": [
+						{
+							"key": "ID",
+							"value": "{{testid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "del book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"this is to check status of process added\", function () {\r",
+							"    pm.response.to.have.status(200)\r",
+							"})\r",
+							"console.log(\"this is a test section\")"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"this is pre requests\")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"ID\" : \"{{testid}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}DeleteBook.php",
+					"host": [
+						"{{BaseURL}}DeleteBook",
+						"php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "https://rahulshettyacademy.com/Library/"
+		},
+		{
+			"key": "randomname",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "randomnum",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "randomid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "randomauther",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testid",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
